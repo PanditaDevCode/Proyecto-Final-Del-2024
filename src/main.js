@@ -1,4 +1,4 @@
-let isNight = false; // Bandera para verificar si ya es noche
+let isNight = false; // Variable para saber si es de noche o de día
 
 function toggleDayNight() {
   const city = document.querySelector('.city');
@@ -44,19 +44,6 @@ function startRandomWindowAnimation(windows) {
 // Cambiar automáticamente a noche después de 10 segundos
 setTimeout(toggleDayNight, 10000);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 import gsap from "gsap";
 
 window.addEventListener("load", () => {
@@ -93,7 +80,7 @@ window.addEventListener("load", () => {
         startSnowing();
 
         // Iniciar estrellas al caer la noche
-        createStars(100); // Ajusta el número de estrellas si lo deseas
+        createStars(100); // Ajusta el número de estrellas 
       }
     });
 
@@ -126,43 +113,41 @@ function animateClouds() {
       ease: "none",
       repeat: -1, // Hacerlo en bucle infinito
       onRepeat: function () {
-        gsap.set(cloud, { x: "100vw" });  // Reposiciona la nube en la parte derecha sin salto
+        gsap.set(cloud, { x: "100vw" });  // Reposiciona la nube en la parte derecha
       }
     });
   });
 }
 
-// Función para hacer que las partículas de nieve caigan desde las nubes
+// Función para hacer que las partículas de nieve caigan por toda la pantalla
 function startSnowing() {
-  setInterval(() => {
-    // Seleccionamos una nube aleatoria de las nubes visibles
-    const clouds = document.querySelectorAll('.cloud');
-    const randomCloud = clouds[Math.floor(Math.random() * clouds.length)];
+  setTimeout(() => {
+    // Crear partículas de nieve aleatorias
+    setInterval(() => {
+      const snow = document.createElement('div');
+      snow.classList.add('snow');
+      document.querySelector('.sky').appendChild(snow);
 
-    // Obtener la posición de la nube para generar nieve debajo de ella
-    const cloudRect = randomCloud.getBoundingClientRect();
-    const cloudX = cloudRect.left + cloudRect.width / 2; // Centrado horizontalmente
-    const cloudY = cloudRect.bottom; // Justo debajo de la nube
+      // Posición aleatoria para cada copo de nieve
+      const snowX = Math.random() * window.innerWidth; // Posición aleatoria horizontal
+      const snowY = -10; // Posición inicial sobre la pantalla
 
-    const snow = document.createElement('div');
-    snow.classList.add('snow');
-    document.querySelector('.sky').appendChild(snow);
+      gsap.set(snow, {
+        left: snowX,
+        top: snowY,
+        opacity: 1, // Hacer que la nieve sea visible
+      });
 
-    // Establecer la posición inicial de la nieve justo debajo de la nube
-    gsap.set(snow, {
-      left: cloudX - 3,  // Centrado horizontalmente con la nube
-      top: cloudY,       // Justo debajo de la nube
-    });
-
-    // Animación de caída de nieve
-    gsap.to(snow, {
-      y: "100vh",  // Caída desde la parte superior de la pantalla
-      opacity: 0,
-      duration: 5 + Math.random() * 3, // Variar la duración de la caída
-      delay: Math.random() * 3, // Agregar un pequeño retraso entre cada partícula
-      onComplete: () => snow.remove()  // Eliminar la partícula cuando termine su animación
-    });
-  }, 200); // Crear nuevas partículas cada 200 ms
+      // Animación de caída aleatoria
+      gsap.to(snow, {
+        y: "100vh",  
+        opacity: 0,  
+        duration: 5 + Math.random() * 3,
+        delay: Math.random() * 3, 
+        onComplete: () => snow.remove()  
+      });
+    }, 100); // Crear nuevas partículas de nieve cada 100 ms
+  }, 5000); // Empezar a nevar después de 5 segundos
 }
 
 // Función para crear estrellas
@@ -180,7 +165,7 @@ function createStars(count) {
     gsap.set(star, {
       left: x,
       top: y,
-      opacity: 0, 
+      opacity: 0,
       scale: 0
     });
 
@@ -189,10 +174,35 @@ function createStars(count) {
     // Animación de entrada de estrellas
     gsap.to(star, {
       opacity: 1,
-      scale: Math.random() * 1.5 + 0.5, 
-      duration: 2, 
-      delay: Math.random() * 5, 
+      scale: Math.random() * 1.5 + 0.5,
+      duration: 2,
+      delay: Math.random() * 5,
       ease: "power2.out"
     });
   }
 }
+
+window.addEventListener("load", () => {
+
+  // Establecer los fuegos al principio como invisibles
+  gsap.set(".fireworks", { opacity: 0 });
+
+  setTimeout(() => {
+    // Hacer los fuegos visibles después de 30 segundos
+    gsap.to(".fireworks", { opacity: 1, duration: 2 });
+  }, 15000); // segundos
+});
+
+// Función para mostrar la pantalla final
+function showFinalScreen() {
+  const finalScreen = document.getElementById("final-screen");
+  finalScreen.classList.remove("hidden");
+  setTimeout(() => {
+    finalScreen.style.opacity = "1";
+  }, 100);
+}
+
+// Simula que ocurre al final del proyecto 
+setTimeout(() => {
+  showFinalScreen();
+}, 30000); // Cambia el tiempo según lo necesites
